@@ -10,7 +10,7 @@ dmenu_bin() {
 colorscheme_menu() {
 	printf "%s\n" \
 		"doom-one" \
-		"darkplus" \
+		"dark-plus" \
 		"dracula" |
 		dmenu_bin
 }
@@ -23,7 +23,7 @@ emacs_change() {
 	case "$colorscheme" in
 		"doom-one") theme="doom-one" ;;
 		"dracula") theme="doom-dracula" ;;
-		"darkplus") theme="doom-dark+" ;;
+		"dark-plus") theme="doom-dark+" ;;
 	esac
 	sed -i "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$emacsconf"
 	/media/emacs-frameworks/doom-emacs/bin/doom sync
