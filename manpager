@@ -1,2 +1,2 @@
 #!/bin/sh
-exec lvim -c "set ft=man" "$@"
+exec nvim -c "set ft=man" "$@"
