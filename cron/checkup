@@ -1,6 +1,6 @@
 #!/bin/sh
 # Syncs repositories and downloads updates, meant to be run as a cronjob.
-ping -q -c 1 archlinux.org > /dev/null || exit
+# ping -q -c 1 archlinux.org > /dev/null || exit
 
 /usr/bin/notify-send "📦 Repository Sync" "Checking for package updates..."
 

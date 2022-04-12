@@ -11,7 +11,8 @@ colorscheme_menu() {
 	printf "%s\n" \
 		"doom-one" \
 		"dark-plus" \
-		"dracula" |
+		"dracula" \
+		"tokyonight" |
 		dmenu_bin
 }
 
@@ -24,9 +25,10 @@ emacs_change() {
 		"doom-one") theme="doom-one" ;;
 		"dracula") theme="doom-dracula" ;;
 		"dark-plus") theme="doom-dark+" ;;
+		"tokyonight") theme="doom-tokyo-night" ;;
 	esac
 	sed -i "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$emacsconf"
-	/media/emacs-frameworks/doom-emacs/bin/doom sync
+	~/.emacs.d/bin/doom sync
 }
 
 xresources_change() {
@@ -35,9 +37,7 @@ xresources_change() {
 }
 
 notify_about_neovim() {
-	notify-send "Change colorscheme variable in" \
-		"Lunarvim and other neovims'" \
-		"private configurations"
+	notify-send "Change colorscheme variable manually in neovim, gtk and qt"
 }
 
 colorscheme=$(colorscheme_menu)

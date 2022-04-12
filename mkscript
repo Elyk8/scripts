@@ -14,12 +14,12 @@ done
 
 file=$HOME/scripts/$ans
 
-if [ -d "$HOME/.local/bin/scripts" ]; then
-	if [ -e "$HOME/.local/bin/scripts/$ans" ]; then
-		$EDITOR "$file"
+if [ -d "$HOME/scripts" ]; then
+	if [ -e "$HOME/scripts/$ans" ]; then
+		"$EDITOR" "$file"
 	else
 		echo "#!/bin/sh" >>"$file"
 		chmod +x "$file"
-		$EDITOR "$file"
+		"$EDITOR" "$file"
 	fi
 fi

@@ -1,18 +1,29 @@
 #!/bin/sh
 # A dmenu wrapper script for system functions.
+#
+
+wm="xmonad"
+
+logout_menu() {
+	printf "%s\n" \
+		"1.  Lock" \
+		"2.  Refresh sxhkd" \
+		"3.  Leave $wm" \
+		"4.  Reboot" \
+		"5.  Shutdown" |
+		dmenu -l 5 -p 'Action: '
+}
+
 case "$(readlink -f /sbin/init)" in
 	*systemd*) ctl='systemctl' ;;
 	*) ctl='loginctl' ;;
 esac
 
-case "$(printf "🔒 lock\n🚪 leave xmonad\n♻️ renew xmonad\n🐻 hibernate\n🔃 reboot\n🖥️shutdown\n💤 sleep\n📺 display off" | dmenu -i -p 'Action: ')" in
-	'🔒 lock') slock ;;
-	'🚪 leave xmonad') kill -TERM "$(pgrep -u "$USER" "\bxmonad$")" ;;
-	'♻️ renew xmonad') kill -HUP "$(pgrep -u "$USER" "\bxmonad$")" ;;
-	'🐻 hibernate') slock $ctl hibernate ;;
-	'💤 sleep') slock $ctl suspend ;;
-	'🔃 reboot') $ctl reboot -i ;;
-	'🖥️shutdown') $ctl poweroff -i ;;
-	'📺 display off') xset dpms force off ;;
+case $(logout_menu | awk -F"." '{print $1}') in
+	"1") slock ;;
+	"2") pidof sxhkd && pkill -SIGUSR1 sxhkd || setsid -f sxhkd ;;
+	"3") kill -TERM "$(pgrep -u "$USER" "\b$wm")" ;;
+	"4") $ctl reboot -i ;;
+	"5") $ctl poweroff -i ;;
 	*) exit 1 ;;
 esac
