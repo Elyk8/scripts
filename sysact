@@ -8,10 +8,11 @@ logout_menu() {
 	printf "%s\n" \
 		"1.  Lock" \
 		"2.  Refresh sxhkd" \
-		"3.  Leave $wm" \
-		"4.  Reboot" \
-		"5.  Shutdown" |
-		dmenu -l 5 -p 'Action: '
+		"3.  Configure drawing tablet" \
+		"4.  Leave $wm" \
+		"5.  Reboot" \
+		"6.  Shutdown" |
+		dmenu -l 6 -p 'Action: '
 }
 
 case "$(readlink -f /sbin/init)" in
@@ -22,8 +23,9 @@ esac
 case $(logout_menu | awk -F"." '{print $1}') in
 	"1") slock ;;
 	"2") pidof sxhkd && pkill -SIGUSR1 sxhkd || setsid -f sxhkd ;;
-	"3") kill -TERM "$(pgrep -u "$USER" "\b$wm")" ;;
-	"4") $ctl reboot -i ;;
-	"5") $ctl poweroff -i ;;
+	"3") dm-wacom --interactive ;;
+	"4") kill -TERM "$(pgrep -u "$USER" "\b$wm")" ;;
+	"5") $ctl reboot -i ;;
+	"6") $ctl poweroff -i ;;
 	*) exit 1 ;;
 esac
