@@ -4,23 +4,36 @@
 #
 
 # Increment to use.
-incr=3
-icon_name="/usr/share/icons/BeautyLine/apps/scalable/mate-brightness-applet.svg"
 
 cur=$(xbacklight -get)
 case "$1" in
+	"") echo "$cur" ;;
 	"up")
 		if [ "$cur" = 0 ]; then
 			xbacklight -set 1
 		else
-			xbacklight -inc $incr
+			xbacklight -inc 5
 		fi
 		;;
 	"down")
 		if [ "$cur" -le 5 ]; then
 			xbacklight -set 1
 		else
-			xbacklight -dec $incr
+			xbacklight -dec 5
+		fi
+		;;
+	"sup")
+		if [ "$cur" = 0 ]; then
+			xbacklight -set 1
+		else
+			xbacklight -inc 1
+		fi
+		;;
+	"sdown")
+		if [ "$cur" -le 5 ]; then
+			xbacklight -set 1
+		else
+			xbacklight -dec 1
 		fi
 		;;
 	*)
@@ -28,6 +41,3 @@ case "$1" in
 		exit 1
 		;;
 esac
-
-cur=$(xbacklight -get)
-dunstify "$cur %" -i "$icon_name" -t 2000 -h int:value:"$cur" --replace=555

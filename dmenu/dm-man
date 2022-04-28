@@ -5,7 +5,11 @@
 # Set a character width for this script if needed:
 #export MANWIDTH=80
 
-man -k . | awk '{ print $1 " " $2 }' | dmenu -p " " -l 8 | awk '{ print $2 " " $1 }' | tr -d '()' | xargs alacritty --class floating -e man
+SELECTED=$(man -k . | awk '{ print $1 " " $2 }' | dmenu -p " " -l 8 | awk '{ print $1 }' | tr -d '()')
+
+if [ -n "$SELECTED" ]; then
+    man -Tpdf "$SELECTED" | zathura -
+fi
 
 # Probably the most useful script ever.
 

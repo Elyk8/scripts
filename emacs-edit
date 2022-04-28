@@ -1,14 +1,10 @@
 #!/bin/sh
 force_tty=false
-force_wait=false
+force_wait=true
 
 case "$1" in
 	-t)
 		force_tty=true
-		shift
-		;;
-	-w | --wait)
-		force_wait=true
 		shift
 		;;
 	-h | --help)
@@ -19,7 +15,6 @@ Emacs client convenience wrapper.
 \033[1mOptions:\033[0m
 \033[0;34m-h, --help\033[0m            Show this message
 \033[0;34m-t, -nw, --tty\033[0m        Force terminal mode
-\033[0;34m-w, --wait\033[0m            Don't supply \033[0;34m--no-wait\033[0m to graphical emacsclient
 \033[0;34m-\033[0m                     Take \033[0;33mstdin\033[0m (when last argument)
 \033[0;34m-m MODE, --mode MODE\033[0m  Mode to open \033[0;33mstdin\033[0m with
 
@@ -34,8 +29,5 @@ if [ -z "$DISPLAY" ] || $force_tty; then
 	# fi
 	emacsclient --tty --alternate-editor="emacs" "$@"
 else
-	if ! $force_wait; then
-		args="--no-wait"
-	fi
-	emacsclient --create-frame "$args" --alternate-editor="emacs" "$@"
+	emacsclient --create-frame --alternate-editor="emacs" ${@}
 fi

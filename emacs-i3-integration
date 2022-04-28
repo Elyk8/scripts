@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$(xdotool getactivewindow getwindowclassname)" = "Emacs" ]; then
+    command="(elk/emacs-i3-integration \"$*\")"
+    if emacsclient -e "$command"; then
+        exit
+    fi
+fi
+
+i3-msg "$@"
