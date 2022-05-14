@@ -1,8 +1,4 @@
 #!/bin/sh
-alaconf="$HOME/.config/alacritty/alacritty.yml"
-emacsconf="$HOME/.config/doom/config.org"
-xresconf="$HOME/.config/x11/Xresources"
-
 dmenu_bin() {
 	dmenu -l 8 -p "Choose your new colorscheme:"
 }
@@ -16,10 +12,12 @@ colorscheme_menu() {
 		dmenu_bin
 }
 
+alaconf="$HOME/.config/alacritty/alacritty.yml"
 alacritty_change() {
 	sed -i "s/^colors: .\+/colors: \*$colorscheme/" "$alaconf"
 }
 
+emacsconf="$HOME/.config/doom/config.org"
 emacs_change() {
 	case "$colorscheme" in
 		"doom-one") theme="doom-one" ;;
@@ -31,8 +29,12 @@ emacs_change() {
 	~/.emacs.d/bin/doom sync
 }
 
+xresconf="$HOME/.config/x11/Xresources"
+xorgconf="$HOME/.config/x11/x.org"
 xresources_change() {
-	sed -i "s/^#include /! #include /g;/$colorscheme/s/^!\s//" "$xresconf"
+	sed -i "s/^#include /! #include /g;/$colorscheme\.xresources/s/^!\s//" "$xorgconf"
+	emacsclient --eval "(require 'org)" --eval "(org-babel-tangle-file \"$xorgconf\")"
+	sleep 0.1
 	xrdb -merge "$xresconf"
 }
 

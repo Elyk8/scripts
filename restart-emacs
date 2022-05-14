@@ -2,7 +2,9 @@
 notify-send "Rebuilding doom configuration ..."
 ~/.emacs.d/bin/doom sync
 notify-send "Done! Restarting emacs server ..."
-emacsclient --eval '(save-buffers-kill-emacs)'
+emacsclient --eval '(save-buffer)'
+sleep 1
+killall emacs
 sleep 1
 /usr/bin/emacs --daemon
 notify-send "Emacs Server started successfully"
