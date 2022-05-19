@@ -4,16 +4,7 @@ set -eu
 # Lists the current directory's files in Neovim, so you can edit it and save to rename them
 # USAGE: bulk-rename [file1 file2]
 
-if which lvim; then
-    edit=lvim
-elif which nvim; then
-    edit=nvim
-elif which vim; then
-    edit=vim
-fi
-
-declare -r FILENAMES_FILE
-FILENAMES_FILE=$(mktemp "${TMPDIR:-/tmp}/bulk-rename.XXX")
+declare -r FILENAMES_FILE=$(mktemp "${TMPDIR:-/tmp}/bulk-rename.XXX")
 
 trap '{ rm -f "${FILENAMES_FILE}" ; }' EXIT
 
@@ -27,7 +18,7 @@ for ((i=0;i<${#src[@]};++i)); do
     echo "${src[i]}" >> "${FILENAMES_FILE}"
 done
 
-"$edit" "${FILENAMES_FILE}"
+nvim "${FILENAMES_FILE}"
 
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'dest=($(cat "${FILENAMES_FILE}"))'
 

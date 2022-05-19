@@ -27,7 +27,7 @@ if [ -z "$DISPLAY" ] || $force_tty; then
 	# if [ -f /tmp/emacs.terminal ] && [ "$(echo "$TERM" | cut -d- -f2)" = "256color" ]; then
 	# 	TERM=xterm-256color && rm /tmp/emacs.terminal
 	# fi
-	emacsclient --tty --alternate-editor="emacs" "$@"
+	emacsclient --tty --alternate-editor="emacs" --eval "(find-file (file-truename \"$*\"))"
 else
-	emacsclient --create-frame --alternate-editor="emacs" ${@}
+	emacsclient --create-frame --alternate-editor="emacs" --eval "(find-file (file-truename \"$*\"))"
 fi
