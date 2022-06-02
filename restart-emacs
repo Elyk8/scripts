@@ -1,6 +1,6 @@
 #!/bin/sh
 notify-send "Rebuilding doom configuration ..."
-~/.emacs.d/bin/doom sync
+/media/emacs/doom/bin/doom sync
 notify-send "Done! Restarting emacs server ..."
 emacsclient --eval '(save-buffer)'
 sleep 1
