@@ -1,10 +1,5 @@
 #!/bin/sh
-notify-send "Rebuilding doom configuration ..."
-/media/emacs/doom/bin/doom sync
-notify-send "Done! Restarting emacs server ..."
-emacsclient --eval '(save-buffer)'
-sleep 1
-killall emacs
-sleep 1
-/usr/bin/emacs --daemon
-notify-send "Emacs Server started successfully"
+emacsclient --eval "(save-buffers-kill-emacs)" || killall emacs
+sleep 0.1
+emacs --daemon
+emacsclient -c --eval "(delete-frame)"

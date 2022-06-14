@@ -11,20 +11,14 @@ setsid -f kmonad $config
 
 sleep 0.1
 
-if test -e $keyb1; then
-    echo "Activate KMonad for Lenovo Thinkpad keyboard"
-    dest="/tmp/kmonad-lenovo.kbd"
-    cp $config $dest
-    sed -i 's:/dev/input/by-path/platform-i8042-serio-0-event-kbd:'$keyb1':' $dest
-    setsid -f kmonad $dest
-fi
+for keyboard in $keyb1 $keyb2 $keyb3; do
+	if test -e $keyboard; then
+		dest="/tmp/kmonad-lenovo.kbd"
+		cp $config $dest
+		sed -i 's:/dev/input/by-path/platform-i8042-serio-0-event-kbd:'$keyboard':' $dest
+		setsid -f kmonad $dest
+	fi
+    sleep 0.1
+done
 
-sleep 0.1
-
-if test -e $keyb2; then
-    echo "Activate KMonad for Razer Black Widow Tournament Edition"
-    dest="/tmp/kmonad-lenovo.kbd"
-    cp $config $dest
-    sed -i 's:/dev/input/by-path/platform-i8042-serio-0-event-kbd:'$keyb2':' $dest
-    setsid -f kmonad $dest
-fi
+notify-send "Kmonad successfully refreshed"

@@ -17,7 +17,8 @@ alacritty_change() {
 	sed -i "s/^colors: .\+/colors: \*$colorscheme/" "$alaconf"
 }
 
-emacsconf="$HOME/.config/doom/config.org"
+doomconf="$HOME/.config/doom/config.org"
+emacsconf="/media/emacs/gnu/init.org"
 emacs_change() {
 	case "$colorscheme" in
 		"doom-one") theme="doom-one" ;;
@@ -25,8 +26,12 @@ emacs_change() {
 		"dark-plus") theme="doom-dark+" ;;
 		"tokyonight") theme="doom-tokyo-night" ;;
 	esac
-	sed -i "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$emacsconf"
-	~/.emacs.d/bin/doom sync
+	sed -i "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$doomconf"
+	sed -i "s/^(elk\/load-theme '.*)/(elk\/load-theme '$theme)/" "$emacsconf"
+	emacsclient --eval "(require 'org)" --eval "(org-babel-tangle-file \"$emacsconf\")"
+	/media/emacs/doom/bin/doom sync
+    killall emacs
+    emacs --daemon
 }
 
 xresconf="$HOME/.config/x11/Xresources"
