@@ -29,5 +29,5 @@ if [ -z "$DISPLAY" ] || $force_tty; then
 	# fi
 	emacsclient --tty --alternate-editor="emacs" --eval "(find-file (file-truename \"$*\"))"
 else
-	emacsclient --create-frame --alternate-editor="emacs" --eval "(find-file (file-truename \"$*\"))"
+	emacsclient --create-frame --alternate-editor="emacs" --no-wait --eval "(find-file (file-truename \"$*\"))"
 fi
