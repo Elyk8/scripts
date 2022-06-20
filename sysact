@@ -1,7 +1,7 @@
 #!/bin/sh
 # A dmenu wrapper script for system functions.
 #
-wm="bspwm"
+wm="i3"
 
 logout_menu() {
 	printf "%s\n" \
@@ -23,7 +23,7 @@ case $(logout_menu | awk -F"." '{print $1}') in
 	"1") slock ;;
 	"2") pidof sxhkd && pkill -SIGUSR1 sxhkd || setsid -f sxhkd ;;
 	"3") dm-wacom --interactive ;;
-	"4") pgrep Xorg && pkill Xorg ;;
+	"4") pgrep $wm && pkill $wm ;;
 	"5") $ctl reboot -i ;;
 	"6") $ctl poweroff -i ;;
 	*) exit 1 ;;
