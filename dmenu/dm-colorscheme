@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 dmenu_bin() {
 	dmenu -l 8 -p "Choose your new colorscheme:"
 }
@@ -17,34 +17,82 @@ alacritty_change() {
 	sed -i "s/^colors: .\+/colors: \*$colorscheme/" "$alaconf"
 }
 
-doomconf="$HOME/.config/doom/config.org"
-emacsconf="/media/emacs/gnu/init.org"
+polyconf="$HOME/.config/polybar/config.ini"
+polybar_change() {
+	sed -e "s/^bg =.\+/bg = #f0$(xrdb -get background | cut -c 2-)/" \
+		-e "s/^fg =.\+/fg = #$(xrdb -get foreground | cut -c 2-)/" \
+		-i "$polyconf"
+}
+
+doomorg="$HOME/.config/doom/config.org"
+doomconf="$HOME/.config/doom/config.el"
+emacsorg="/media/emacs/gnu/init.org"
+emacsconf="/media/emacs/gnu/init.el"
 emacs_change() {
 	case "$colorscheme" in
-		"doom-one") theme="doom-one" ;;
-		"dracula") theme="doom-dracula" ;;
-		"dark-plus") theme="doom-dark+" ;;
-		"tokyonight") theme="doom-tokyo-night" ;;
+	"doom-one") theme="doom-one" ;;
+	"dracula") theme="doom-dracula" ;;
+	"dark-plus") theme="doom-dark+" ;;
+	"tokyonight") theme="doom-tokyo-night" ;;
 	esac
-	sed -i "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$doomconf"
-	sed -i "s/^(elk\/load-theme '.*)/(elk\/load-theme '$theme)/" "$emacsconf"
-	emacsclient --eval "(require 'org)" --eval "(org-babel-tangle-file \"$emacsconf\")"
-	/media/emacs/doom/bin/doom sync
-    killall emacs
-    emacs --daemon
+	sed -si "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$doomconf" "$doomorg"
+	sed -si "s/^(elk\/load-theme '.*)/(elk\/load-theme '$theme)/" "$emacsconf" "$emacsorg"
 }
 
 xresconf="$HOME/.config/x11/Xresources"
-xorgconf="$HOME/.config/x11/x.org"
 xresources_change() {
-	sed -i "s/^#include /! #include /g;/$colorscheme\.xresources/s/^!\s//" "$xorgconf"
-	emacsclient --eval "(require 'org)" --eval "(org-babel-tangle-file \"$xorgconf\")"
+	sed -i "s/^#include /! #include /g;/$colorscheme\.xresources/s/^!\s//" "$xresconf"
 	sleep 0.1
 	xrdb -merge "$xresconf"
+	sleep 0.1
 }
 
-notify_about_neovim() {
-	notify-send "Change colorscheme variable manually in neovim, gtk and qt"
+
+zathura_change() {
+  cat <<- CONF > "$HOME/.config/zathura/zathurarc"
+  set scroll-page-aware "true"
+  # set smooth-scroll "true"
+  set scroll-full-overlap 0.01
+  set scroll-step 100
+
+  set dbus-service true
+  set synctex true
+  set sandbox none
+
+  set statusbar-h-padding 0
+  set statusbar-v-padding 0
+  set page-padding 1
+  set selection-clipboard clipboard
+  set highlight-transparency .5
+  set zoom-center "true"
+  map <Space> toggle_index
+  map D toggle_page_mode
+  map r reload
+  map R rotate
+  map K zoom in
+  map J zoom out
+  map i recolor
+  map p print
+  map g goto top
+
+  set adjust-open width
+  set recolor true
+  set recolor-keephue             true      # keep original color
+
+  set default-bg                  "$(xrdb -get background)" # bg
+  set default-fg                  "$(xrdb -get foreground)" # fg
+  set render-loading              true
+  set render-loading-bg           "$(xrdb -get background)" # bg
+  set render-loading-fg           "$(xrdb -get foreground)" # fg
+
+  # Recolor book content's color
+  set recolor-lightcolor          "$(xrdb -get background)" # bg
+  set recolor-darkcolor           "$(xrdb -get foreground)" # fg
+CONF
+}
+
+appendix() {
+	notify-send "Change colorscheme variable manually in neovim, gtk and qt. Restart emacs for changes to take effect."
 }
 
 colorscheme=$(colorscheme_menu)
@@ -57,4 +105,6 @@ fi
 alacritty_change
 xresources_change
 emacs_change
-notify_about_neovim
+zathura_change
+polybar_change
+appendix
