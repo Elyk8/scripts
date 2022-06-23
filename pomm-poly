@@ -1,5 +1,0 @@
-#!/bin/sh
-
-if pgrep emacs > /dev/null; then
-    emacsclient --eval "(if (boundp 'pomm-current-mode-line-string) pomm-current-mode-line-string \"\") " | xargs echo
-fi

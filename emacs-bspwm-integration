@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ "$(xdotool getactivewindow getwindowclassname)" = "Emacs" ]; then
-    command="(emacs-bspwm-integration \"$*\")"
-    timeout 1 emacsclient -e "$command"
-else
-    bspc $@
-fi
