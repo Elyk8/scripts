@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # requires jq
 
+i3wspid="$(pidof -x i3-display-swap)"
+[ -n "$i3wspid" ] && wait "$i3wspid"
+
 DISPLAY_CONFIG=($(i3-msg -t get_outputs | jq -r '.[]|select(.active == true) |"\(.current_workspace)"'))
 #ACTIVE_WS=($(i3-msg -t get_workspaces | jq -r '.[]|select(.focused == true) | "\(.name)"'))
 for ROW in "${DISPLAY_CONFIG[@]}"
