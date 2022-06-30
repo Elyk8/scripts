@@ -24,6 +24,7 @@ if ! scratchpad_show; then
 
     # launch the application.
     eval "${LAUNCH_CMD}" &
+    sleep 0.1
 
     # Wait for the next window event.
     i3-msg -t subscribe  '[ "window" ]'
