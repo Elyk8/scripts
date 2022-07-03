@@ -6,7 +6,7 @@ dmenu_bin() {
 colorscheme_menu() {
 	printf "%s\n" \
 		"doom-one" \
-		"dark-plus" \
+		"darkplus" \
 		"dracula" \
 		"tokyonight" |
 		dmenu_bin
@@ -26,13 +26,13 @@ polybar_change() {
 
 doomorg="$HOME/.config/doom/config.org"
 doomconf="$HOME/.config/doom/config.el"
-emacsorg="/media/emacs/gnu/init.org"
-emacsconf="/media/emacs/gnu/init.el"
+emacsorg="$HOME/.local/share/emacs/gnu/init.org"
+emacsconf="$HOME/.local/share/emacs/gnu/init.el"
 emacs_change() {
 	case "$colorscheme" in
 	"doom-one") theme="doom-one" ;;
 	"dracula") theme="doom-dracula" ;;
-	"dark-plus") theme="doom-dark+" ;;
+	"darkplus") theme="doom-dark+" ;;
 	"tokyonight") theme="doom-tokyo-night" ;;
 	esac
 	sed -si "s/^(setq doom-theme '.*)/(setq doom-theme '$theme)/" "$doomconf" "$doomorg"
@@ -91,8 +91,13 @@ zathura_change() {
 CONF
 }
 
+neovim_colorconf="$HOME/.config/nvim/lua/configs/colorscheme.lua"
+neovim_change() {
+	sed -i "s/colorscheme = .*/colorscheme = \"$colorscheme\"/g" "$neovim_colorconf"
+}
+
 appendix() {
-	notify-send "Change colorscheme variable manually in neovim, gtk and qt. Restart emacs for changes to take effect."
+	notify-send "Change colorscheme variable manually in gtk and qt. Restart emacs for changes to take effect."
 }
 
 colorscheme=$(colorscheme_menu)
@@ -107,4 +112,5 @@ xresources_change
 emacs_change
 zathura_change
 polybar_change
+neovim_change
 appendix
