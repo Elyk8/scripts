@@ -10,7 +10,7 @@ choice=$(printf "%s\n" "$wikidocs" | \
 
 if [ "$choice" ]; then
     article=$(printf "%s%s.html" "$wikidir" "$choice")
-    emacsclient -c -n --eval "(eww-open-file \"$article\")" >/dev/null
+    $BROWSER "$article"
 else
     echo "Program terminated." && exit 0
 fi

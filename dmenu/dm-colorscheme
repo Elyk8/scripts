@@ -109,7 +109,7 @@ fi
 
 alacritty_change
 xresources_change
-emacs_change
+# emacs_change
 zathura_change
 polybar_change
 neovim_change
